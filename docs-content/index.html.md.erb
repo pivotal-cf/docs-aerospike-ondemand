@@ -1,59 +1,56 @@
 ---
-title: YOUR-PRODUCT-NAME
+title: Aerospike EE OnDemand Service for PCF
 owner: Partners
 ---
 
-**This topic should begin with a brief description of your product. See below for an example.**
+This documentation describes Aerospike EE OnDemand Service for Pivotal Cloud Foundry (PCF). 
+Aerospike EE OnDemand Service for PCF allows you to configure and deploy multiple Aerospike Enterprise Edition NoSQL database clusters
+into your PCF environment. 
 
-This documentation describes the Redis Labs Enterprise Cluster (RLEC) Service Broker for Pivotal Cloud Foundry (PCF). 
-The RLEC Service Broker registers a service broker on PCF and exposes its service plans on the Marketplace. 
-Developers can provision Redis databases by creating instances of the service plans using Apps Manager or the cf CLI.
+These clusters can be configured and scaled independently as required by your application. The tile 
+allows you to configure the default settings for a small, medium and large cluster plans.
+Developers can create instances of these service plans using the cf Command Line Interface (CLI), and bind them to applications in order to access the Aerospike database managed by this service.
+
+Once created, Aerospike clusters can be modified using the cf CLI which allows dynamic scaling of the services as required.
 
 ## <a id='overview'></a>Overview
 
-**The overview should provide a description of the product's key features.**
+Aerospike EE OnDemand Service for PCF includes the following key features:
 
-YOUR-PRODUCT-NAME includes the following key features:
-
-* Feature one.
-* Feature two.
-* Feature three.
+* Create and destroy Aerospike database cluster services as required using the cf CLI.
+* Dynamically scale individual Aerospike database cluster services.
+* Monitor and manage Aerospike database cluster service using the Aerospike Management Console.
 
 ## <a id="snapshot"></a>Product Snapshot
 
 <dl>
-<dt>YOUR-PRODUCT-NAME details:</dt>
-<dd><strong>Version</strong>: vYOUR-VERSION-NUMBER </dd>
-<dd><strong>Release date</strong>: YOUR-RELEASE-DATE (Ex: August 1, 2016)</dd>
-<dd><strong>Software component version</strong>: vYOUR-SOFTWARE-COMPONENT-VERSION-NUMBER</dd>
-<dd><strong>Compatible Ops Manager version(s)</strong>: vYOUR-COMPATIBLE-OPS-MAN-VERSION (Ex. v1.6.x, v1.7.x)</dd>
-<dd><strong>Compatible Elastic Runtime version(s)</strong>: vYOUR-COMPATIBLE-ELASTIC-RUNTIME-VERSION (Ex. v1.4.x, v1.5.x, v1.6.x)</dd>
-<dd><strong>vSphere support?</strong> YES-OR-NO</dd>
-<dd><strong>OpenStack support?</strong> YES-OR-NO</dd>
-<dd><strong>AWS support?</strong> YES-OR-NO</dd>
+<dt>Aerospike EE OnDemand Service for PCF details:</dt>
+<dd><strong>Version</strong>: v0.1.0 </dd>
+<dd><strong>Release date</strong>: January 21, 2017</dd>
+<dd><strong>Software component version</strong>: Aerospike Server Enterprise Edition v3.11.0.1</dd>
+<dd><strong>Compatible Ops Manager version(s)</strong>: v1.7.x, v1.8.x</dd>
+<dd><strong>Compatible Elastic Runtime version(s)</strong>: v1.5.x, v1.6.x, v1.7.x, v1.8.x</dd>
+<dd><strong>vSphere support?</strong> YES</dd>
+<dd><strong>OpenStack support?</strong> NO</dd>
+<dd><strong>AWS support?</strong> NO</dd>
 </dl>
 
 ## <a id="reqs"></a>Requirements
 
-**Provide any general or specific requirements, prerequisites, or dependencies here. 
-A general requirement might be something like, "An AppDynamics account." 
-A specific requirement might be something like, "Packaging Dependencies for Offline Buildpacks."**
+Aerospike EE OnDemand Service for PCF has the following requirements:
 
-YOUR-PRODUCT-NAME has the following requirements:
-
-+ PREREQUISITE-1
-
-+ PREREQUISITE-2
++ This product requires you to have a valid Enterprise Edition license for the Aerospike database.
 
 ## <a id="limitations"></a>Limitations
 
-**List any known limitations.**
+The current version has only been tested in the vSphere environment.
 
 ## <a id="feedback"></a>Feedback
 
-Please provide any bugs, feature requests, or questions to the [Pivotal Cloud Foundry Feedback](mailto:pivotal-cf-feedback@pivotal.io) list or send an email to YOUR-SUPPORT-EMAIL.
+Please provide any bugs, feature requests, or questions to the [Pivotal Cloud Foundry Feedback](mailto:pivotal-cf-feedback@pivotal.io) list or send an email to [pcf-support@aerospike.com](mailto:pcf-support@aerospike.com).
 
 ## <a id='license'></a>License
 
-**List any license information here.**
+To obtain a license for the Enterprise Edition of the server, use [this form](http://www.aerospike.com/contact-us/) to contact the Aerospike sales team.
+
 

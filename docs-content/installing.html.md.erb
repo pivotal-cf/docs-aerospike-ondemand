@@ -1,24 +1,52 @@
 ---
-title: Installing and Configuring YOUR-PRODUCT-NAME
+title: Installing and Configuring Aerospike EE OnDemand Service for PCF
 owner: Partners
 ---
 
-This topic describes how to install and configure YOUR-PRODUCT-NAME.
+##<a id='install'></a> Install and Configure Aerospike EE OnDemand Service for PCF
 
-##<a id='install'></a> Install and Configure YOUR-PRODUCT-NAME
+To install and configure the Aerospike EE OnDemand Service for PCF, perform the following steps:
 
+###<a id='install'></a> Download and install the tile
 1. Download the product file from Pivotal Network.
 
 1. Navigate to the Ops Manager Installation Dashboard and click **Import a Product** to upload the product file. 
 
-1. Click **Add** next to the uploaded YOUR-PRODUCT-NAME tile in the Ops Manager **Available Products** view to add it to your staging area.
+1. Click click the **+** next to the uploaded Aerospike EE OnDemand Service tile in the Ops Manager **Available Products** view to add it to your staging area.
+    <br><%= image_tag('add-tile.png') %>
 
-1. Click the newly added **YOUR-PRODUCT-NAME** tile.
+1. Click the newly added **Aerospike EE OnDemand Service for PCF** tile.
+    <br><%= image_tag('tile.png') %>
 
-1. **This portion of the procedure should tell the users how to configure the newly added tile by walking them through the sections. Which fields should they fill out? What are the different checkboxes? Include relevant screenshots here.** 
+###<a id='az_networks'></a> Assign availability zones and networks
+1. From the **Settings** tab, click **Assign AZs and Networks**.
+    <br><%= image_tag('azs-network-tab.png') %>
+
+1. Assign the avaiability zone and configure the **Network** and **Service Network**.
+    <br><%= image_tag('az-and-networks.png') %>
 
 1. Click **Save**.
 
-1. Return to the Ops Manager Installation Dashboard and click **Apply Changes** to install YOUR-PRODUCT-NAME tile.
+###<a id='plans'></a> Configure the Small, Medium and Large plans
+1. From the **Settings** tab, click **Aerospike OnDemand Plan Small**.
+    <br><%= image_tag('small-plan-tab.png') %>
 
-**If needed, include additional configuration information below. For example, maybe there are configuration options not required for installation but which could be useful for certain users.**
+1. Configure the settings for the **Small** plan.
+    <br><%= image_tag('plan-config-1.png') %>
+    <br><%= image_tag('plan-config-2.png') %>
+
+1. Click **Save**.
+
+1. Configure the **Medium** and **Large** plans following the same steps as above
+
+###<a id='license'></a> Enter Aerospike EE license information
+1. From the **Settings** tab, click **Aerospike Enterprise Edition License**.
+    <br><%= image_tag('license-tab.png') %>
+
+1. Enter the user name and password that is used to download the Enterprise Edition software from the [Aerospike website](http://www.aerospike.com/enterprise/download/server/latest)
+    <br><%= image_tag('ee-license.png') %>
+
+1. Click **Save**.
+
+###<a id='apply'></a> Apply changes
+1. Return to the Ops Manager Installation Dashboard and click **Apply Changes** to install the Aerospike EE OnDemand Service for PCF tile.
