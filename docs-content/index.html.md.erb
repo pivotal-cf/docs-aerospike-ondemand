@@ -4,42 +4,39 @@ owner: Partners
 ---
 
 This documentation describes Aerospike EE OnDemand Service for Pivotal Cloud Foundry (PCF). 
-Aerospike EE OnDemand Service for PCF allows you to configure and deploy multiple Aerospike Enterprise Edition NoSQL database clusters
-into your PCF environment. 
+Aerospike EE OnDemand Service for PCF allows you to configure and deploy multiple Aerospike Enterprise Edition NoSQL database clusters to your PCF deployment. 
 
 These clusters can be configured and scaled independently as required by your application. The tile 
-allows you to configure the default settings for a small, medium and large cluster plans.
+allows you to configure the default settings for small, medium and large cluster plans.
 Developers can create instances of these service plans using the cf Command Line Interface (CLI), and bind them to applications in order to access the Aerospike database managed by this service.
 
-Once created, Aerospike clusters can be modified using the cf CLI which allows dynamic scaling of the services as required.
+Once created, Aerospike clusters can be modified using the cf CLI. This allows dynamic scaling of the services as required.
 
 ## <a id='overview'></a>Overview
 
 Aerospike EE OnDemand Service for PCF includes the following key features:
 
-* Create and destroy Aerospike database cluster services as required using the cf CLI.
-* Dynamically scale individual Aerospike database cluster services.
-* Monitor and manage Aerospike database cluster service using the Aerospike Management Console.
+* Create and destroy Aerospike database cluster services as required using the cf CLI
+* Dynamically scale individual Aerospike database cluster services
+* Monitor and manage Aerospike database cluster service using the Aerospike Management Console
 
 ## <a id="snapshot"></a>Product Snapshot
 
 <dl>
-<dt>Aerospike EE OnDemand Service for PCF details:</dt>
+<dt>Aerospike EE OnDemand Service for PCF Details:</dt>
 <dd><strong>Version</strong>: v0.1.0 </dd>
 <dd><strong>Release date</strong>: January 21, 2017</dd>
 <dd><strong>Software component version</strong>: Aerospike Server Enterprise Edition v3.11.0.1</dd>
 <dd><strong>Compatible Ops Manager version(s)</strong>: v1.7.x, v1.8.x</dd>
 <dd><strong>Compatible Elastic Runtime version(s)</strong>: v1.5.x, v1.6.x, v1.7.x, v1.8.x</dd>
-<dd><strong>vSphere support?</strong> YES</dd>
-<dd><strong>OpenStack support?</strong> NO</dd>
-<dd><strong>AWS support?</strong> NO</dd>
+<dd><strong>vSphere support?</strong> Yes</dd>
+<dd><strong>OpenStack support?</strong> No</dd>
+<dd><strong>AWS support?</strong> No</dd>
 </dl>
 
 ## <a id="reqs"></a>Requirements
 
-Aerospike EE OnDemand Service for PCF has the following requirements:
-
-+ This product requires you to have a valid Enterprise Edition license for the Aerospike database.
+Aerospike EE OnDemand Service for PCF requires a valid Enterprise Edition license for the Aerospike database.
 
 ## <a id="limitations"></a>Limitations
 

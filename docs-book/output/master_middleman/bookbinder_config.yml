@@ -3,18 +3,18 @@
   ".": 
 :production_host: hello
 :subnav_templates:
-  myservice: myservice_subnav
+  PARTNER-DOCS-SUBDIR: PARTNER-DOCS-SUBDIR_subnav
 :template_variables: 
-:local_repo_dir: "/Users/pivotal/workspace/docs-partners-template"
+:local_repo_dir: "/Users/pivotal/workspace/docs-aerospike-ondemand"
 :workspace: !ruby/object:Pathname
-  path: "/Users/pivotal/workspace/docs-partners-template/docs-book/output/master_middleman/source"
+  path: "/Users/pivotal/workspace/docs-aerospike-ondemand/docs-book/output/master_middleman/source"
 :feedback_enabled: 
 :repo_link_enabled: true
 :repo_links:
-  myservice:
+  PARTNER-DOCS-SUBDIR:
     repo: docs-content
     ref: master
     at_path: 
 :product_info:
-  myservice: {}
+  PARTNER-DOCS-SUBDIR: {}
 :elastic_search: false
