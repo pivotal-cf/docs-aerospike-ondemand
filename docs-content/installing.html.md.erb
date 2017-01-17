@@ -30,29 +30,26 @@ To install and configure the Aerospike EE OnDemand Service for PCF, perform the 
 1. From the **Settings** tab, click **Aerospike OnDemand Plan Small**.
     <br><%= image_tag('small-plan-tab.png') %>
 
-1. Configure the VM settings for the Aerospike cluster and Aerospike Management Console for the **Small** plan.
-    * First configure the Aerospike cluster settings for the **Small** plan. 
-        + Choose the VM type that will be used for each Aerospike node. The VM type dropdown menu is automatically populated with the list of VMs configured for your cloud environment.
-        + Choose the disk type that will be used for each Aerospike node.
-        + Enter the number of instances (cluster size) to use for the **Small** plan.
-    * Next, configure the settings for the Aerospike Management Console which is installed along with the Aerospike service.
-        + Choose the VM type that will be used for the Aerospike Management Console.
-        + Choose the disk type that will be used for the Aerospike Management Console.
-    * Select the availability zone(s) where this service will be deployed.
-
+1. Perform the following steps to configure the VM settings for the Aerospike cluster and Aerospike Management Console (AMC) for the **Small** plan.
     <br><%= image_tag('plan-config-1.png') %>
 
-1. Configure the namespace that will be used for the **Small** plan.
-    * Enter the name of the namespace that will created in the Aerospike service for the **Small** plan.
-    * Select the storage device to be used (Memory or Device) that the namespace will use. A **Device** storage type will persist the data, whereas a **Memory** storage type will not.
-    * Enter the default ttl (time-to-live) for records that will be stored in the Aerospike service. Records will expire in the system beyond this time. A value of **0** means that records will never expire. This default value can be overriden by the client if desired.
-    * Enter the size of the namespace. This is the maximum amount of memory to allocate for records that will be maintained in this Aerospike service.
-    * Select the replication factor to use for the **Small** plan. The replication factor is the number of copies of the record to maintain within the cluster.
-    <p class="note"><strong>Note</strong>: The replication factor will be limited to the number of nodes in the cluster.</p>
-    * Enter the file size to use for the namespace. This is only used if the namespace is using the **Device** storage type. A guideline is to use a file size that is roughly 4x the size of the namespace.
-    * If the "Keep a copy of namespace always in memory" check box is selected, the Aerospike service will always keep a copy of all records in memory. This only applies if the namespace is using the **Device** storage type. For a **Memory** storage type, all records are always in memory.
+    1. For **VM type for the Aerospike Cluster**, use the dropdown menu to select the VM type to use for each Aerospike node. The dropdown menu is automatically populated with the list of VMs configured for your cloud environment.
+    1. For **Disk type for Aerospike Cluster VMs**, use the dropdown menu to select th disk type to use for each Aerospike node.
+    1. For **Number of instances for the Aerospike Cluster**, enter the number of instances to use for the **Small** plan. This is your cluster size.
+    1. For **VM type for the Aerospike Management Console (AMC)**, use the dropdown menu to select the VM type to use for the AMC.
+    1. For **Disk type for Aerospike Management Console**, use the dorpdown menu to select the disk type to use for the AMC.
+    1. Under **Availability zone(s) for Plan 'Small'**, select one or more checkboxes that correspond to the availability zone(s) where this service will be deployed.
 
+1. Perform the following steps to configure the namespace for the **Small** plan.
     <br><%= image_tag('plan-config-2.png') %>
+    1. For **Name of the namespace**, enter the name of the namespace that will be created in the Aerospike service for the **Small** plan.
+    1. For **Storage device for namespace**, use the dropdown menu to select the storage device that the namespace will use. A **Device** storage type persists the data, and a **Memory** storage type does not.
+    1. For **Default ttl for namespace**, enter the default time-to-live for records that will be stored in the Aerospike service. Records will expire in the system beyond this time. A value of **0** means that records will never expire. This default value can be overriden by the client if desired.
+    1. For **Size of namespace**, enter the size of the namespace. This is the maximum amount of memory to allocate for records that will be maintained in this Aerospike service.
+    1. For **Replication factor for namespace**, use the dropdown menu to select the replication factor to use for the **Small** plan. The replication factor is the number of copies of the record to maintain within the cluster.
+    <p class="note"><strong>Note</strong>: The replication factor is limited to the number of nodes in the cluster.</p>
+    1. For **File size for namespace**, enter the file size to use for the namespace. Only complete this field if the namespace is using the **Device** storage type. Pivotal recommends using a file size that is roughly 4x the size of the namespace.
+    1. Select the **Keep a copy of namespace always in memory** checkbox to instruct the Aerospike service to always keep a copy of all records in memory. Only complete this field if the namespace is using the **Device** storage type. For a **Memory** storage type, all records are always in memory.
 
 1. Click **Save**.
 
