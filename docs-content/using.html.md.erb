@@ -5,7 +5,7 @@ owner: Partners
 
 This topic describes how to use Aerospike EE OnDemand Service for Pivotal Cloud Foundry (PCF).
 
-After installing and configuring the Aerospike EE OnDemand Serice for PCF tile, developers can create service instances of Aerospike service plans and bind them to their applications using the cf CLI. Binding an Aerospike service instance to an application provides the application with information it can use to store and retrieve information in an Aerospike database.
+After installing and configuring the Aerospike EE OnDemand Service for PCF tile, developers can create service instances of Aerospike service plans and bind them to their applications using the Cloud Foundry Command Line Interface (cf CLI). Binding an Aerospike service instance to an application provides the application with information it can use to store and retrieve information in an Aerospike database.
 
 When creating an Aerospike service instance, the tile will also create an Aerospike Management Console (AMC) that can be used to monitor the health and activity on the Aerospike cluster.
 
@@ -48,7 +48,7 @@ To create an Aerospike service instance using the cf CLI, perform the following 
     </pre>
     You can use arbitrary parameters to customize the service instance. See the [Use Arbitrary Parameters](#parameters) section below for more information.
 
-1. Bind the instance to an application, adding a parameter with name `setname` and set the value to the name of the set in the Aerospike database that this application should use to store its data. 
+1. Bind the instance to an application, adding a parameter with name `setname`, and set the value to the name of the set in the Aerospike database that this application should use to store its data. 
     <pre class="terminal">
     $ cf bind-service YOUR-APP YOUR-SERVICE-INSTANCE
     Binding service YOUR-SERVICE-INSTANCE to app YOUR-APP in org example / space development as user@example.com...
@@ -62,7 +62,7 @@ To create an Aerospike service instance using the cf CLI, perform the following 
     </pre>
     The application now has all the credentials required to connect to the Aerospike database in the `VCAP_SERVICES` environment variable.
 
-1. Follow the steps below to connect to the AMC for your cluster.
+1. Follow the steps in the [Connect to the AMC](#amc) section of this topic to connect to the AMC for your cluster.
 
 ##<a id='parameters'></a>Use Arbitrary Parameters
 
@@ -72,22 +72,22 @@ The Aerospike EE OnDemand Service for PCF supports a number of arbitrary paramet
 
 Use the following parameters to customize the Aerospike service instance. If specified, these parameters take precedence over the defaults set up for the plan.
 
-+ `server\_instances`: Number of nodes in the cluster
-+ `server\_vm\_type`: VM type to use for each of the cluster nodes, such as `large.mem`
-+ `server\_persistent\_disk\_type`: Type of disk to use on each of the cluster nodes
++ `server_instances`: Number of nodes in the cluster
++ `server_vm_type`: VM type to use for each of the cluster nodes, such as `large.mem`
++ `server_persistent_disk_type`: Type of disk to use on each of the cluster nodes
 
 ###<a id='namespace'></a>Aerospike Namespace Parameters
 
 Use the following parameters to customize the namespace configured on the Aerospike service instance. If specified, these parameters take precedence over the defaults set up for the plan.
 
-+ `namespace\_name`: Name to use for the namespace
-+ `namespace\_size`: Memory-size to use for the namespace 
++ `namespace_name`: Name to use for the namespace
++ `namespace_size`: Memory-size to use for the namespace 
     <p class="note"><strong>Note</strong>: For more information about configuring memory-size, see the Aerospike <a href="http://www.aerospike.com/docs/reference/configuration#memory-size">documentation</a>.</p>
-+ `namespace\_storage\_type`: Storage type to use for the namespace, either `Device` or `Memory`
-+ `namespace\_replication\_factor`: Number of copies of a record to be maintained in the cluster
-+ `namespace\_default\_ttl`: Default time-to-live, in seconds, for a record from the time of creation or last update
-+ `namespace\_filesize`: Maximum size for each file storage defined in this namespace
-+ `namespace\_data\_in\_memory`: Boolean; if `true`, always keep a copy of all data in memory
++ `namespace_storage_type`: Storage type to use for the namespace, either `Device` or `Memory`
++ `namespace_replication_factor`: Number of copies of a record to be maintained in the cluster
++ `namespace_default_ttl`: Default time-to-live, in seconds, for a record from the time of creation or last update
++ `namespace_filesize`: Maximum size for each file storage defined in this namespace
++ `namespace_data_in_memory`: Boolean; if `true`, always keep a copy of all data in memory
 
 ###<a id='service'></a>AMC Parameter
 
