@@ -5,7 +5,7 @@ owner: Partners
 
 This topic describes how to use Aerospike EE OnDemand Service for Pivotal Cloud Foundry (PCF).
 
-After installing and configuring the Aerospike EE OnDemand Service for PCF tile, developers can create service instances of Aerospike service plans and bind them to their applications using the Cloud Foundry Command Line Interface (cf CLI). Binding an Aerospike service instance to an application provides the application with information it can use to store and retrieve information in an Aerospike database.
+After installing and configuring the Aerospike EE OnDemand Service for PCF tile, developers can create service instances of Aerospike service plans and bind them to their apps using the Cloud Foundry Command Line Interface (cf CLI). Binding an Aerospike service instance to an app provides the app with information it can use to store and retrieve information in an Aerospike database.
 
 When creating an Aerospike service instance, the tile will also create an Aerospike Management Console (AMC) that can be used to monitor the health and activity on the Aerospike cluster.
 
@@ -48,7 +48,7 @@ To create an Aerospike service instance using the cf CLI, perform the following 
     </pre>
     You can use arbitrary parameters to customize the service instance. See the [Use Arbitrary Parameters](#parameters) section below for more information.
 
-1. Bind the instance to an application, adding a parameter with name `setname`, and set the value to the name of the set in the Aerospike database that this application should use to store its data. 
+1. Bind the instance to an app, adding a parameter with name `setname`, and set the value to the name of the set in the Aerospike database that this app should use to store its data. 
     <pre class="terminal">
     $ cf bind-service YOUR-APP YOUR-SERVICE-INSTANCE
     Binding service YOUR-SERVICE-INSTANCE to app YOUR-APP in org example / space development as user@example.com...
@@ -56,11 +56,11 @@ To create an Aerospike service instance using the cf CLI, perform the following 
     TIP: Use 'cf restage YOUR-APP' to ensure your env variable changes take effect
     </pre>
 
-1. Restage the application for the binding to take effect.
+1. Restage the app for the binding to take effect.
     <pre class="terminal">
     $ cf restage YOUR-APP
     </pre>
-    The application now has all the credentials required to connect to the Aerospike database in the `VCAP_SERVICES` environment variable.
+    The app now has all the credentials required to connect to the Aerospike database in the `VCAP_SERVICES` environment variable.
 
 1. Follow the steps in the [Connect to the AMC](#amc) section of this topic to connect to the AMC for your cluster.
 
@@ -121,9 +121,9 @@ Consult the following examples:
 
 ##<a id='amc'></a>Connect to the AMC
 
-To access the AMC for your cluster after creating an Aerospike service instance and binding it to an application, perform the following steps:
+To access the AMC for your cluster after creating an Aerospike service instance and binding it to an app, perform the following steps:
 
-1. Inspect the environment of the application to get the URL and credentials for the Aerospike Management Console.
+1. Inspect the environment of the app to get the URL and credentials for the Aerospike Management Console.
 
     <pre class="terminal">
     $ cf env YOUR-APP
