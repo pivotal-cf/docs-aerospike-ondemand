@@ -1,0 +1,301 @@
+# Schema
+
+```
+
+```
+
+| Abstract            | Extensible | Status       | Identifiable | Custom Properties | Additional Properties | Defined In |
+| ------------------- | ---------- | ------------ | ------------ | ----------------- | --------------------- | ---------- |
+| Can be instantiated | Yes        | Experimental | No           | Forbidden         | Forbidden             |            |
+
+# Properties
+
+| Property                              | Type       | Required     | Nullable | Defined by    |
+| ------------------------------------- | ---------- | ------------ | -------- | ------------- |
+| [cluster_name](#cluster_name)         | `string`   | **Required** | No       | (this schema) |
+| [namespaces](#namespaces)             | `object[]` | **Required** | No       | (this schema) |
+| [server_instances](#server_instances) | `integer`  | Optional     | No       | (this schema) |
+| [server_vm_type](#server_vm_type)     | `string`   | Optional     | No       | (this schema) |
+| [tls_ca_cert](#tls_ca_cert)           | `string`   | Optional     | No       | (this schema) |
+| [tls_enable](#tls_enable)             | `boolean`  | Optional     | No       | (this schema) |
+| [tls_private_key](#tls_private_key)   | `string`   | Optional     | No       | (this schema) |
+| [tls_public_key](#tls_public_key)     | `string`   | Optional     | No       | (this schema) |
+| [xdr_deployments](#xdr_deployments)   | `string[]` | Optional     | No       | (this schema) |
+| [xdr_enable](#xdr_enable)             | `boolean`  | Optional     | No       | (this schema) |
+
+## cluster_name
+
+A name for the cluster. This should be unique across all Aerospike Deployments
+
+`cluster_name`
+
+- is **required**
+- type: `string`
+- defined in this schema
+
+### cluster_name Type
+
+`string`
+
+## namespaces
+
+An array of namespace objects
+
+`namespaces`
+
+- is **required**
+- type: `object[]`
+- at least `1` items in the array
+- defined in this schema
+
+### namespaces Type
+
+Array type: `object[]`
+
+All items must be of the type: `object` with following properties:
+
+| Property             | Type    | Required     |
+| -------------------- | ------- | ------------ |
+| `default_ttl`        | string  | Optional     |
+| `disk_size`          | string  | Optional     |
+| `memory_size`        | string  | **Required** |
+| `name`               | string  | **Required** |
+| `replication_factor` | integer | Optional     |
+| `storage_type`       | string  | **Required** |
+| `xdr_enable`         | boolean | Optional     |
+| `xdr_endpoints`      | array   | Optional     |
+
+#### default_ttl
+
+Default ttl for the namespace. Should be 0 to indicate no expiration, or An integer followed by one of [SDH]
+
+`default_ttl`
+
+- is optional
+- type: `string`
+
+##### default_ttl Type
+
+`string`
+
+#### disk_size
+
+Disk size for the namespace. Should be an integer followed by one of [KMGTP] for the unit. Required if
+storage_type=device
+
+`disk_size`
+
+- is optional
+- type: `string`
+
+##### disk_size Type
+
+`string`
+
+#### memory_size
+
+Memory size for the namespace. Should be an integer followed by one of [KMGTP] for the unit
+
+`memory_size`
+
+- is **required**
+- type: `string`
+
+##### memory_size Type
+
+`string`
+
+#### name
+
+The name of the namespace
+
+`name`
+
+- is **required**
+- type: `string`
+
+##### name Type
+
+`string`
+
+#### replication_factor
+
+The replication factor for the namespace
+
+`replication_factor`
+
+- is optional
+- type: `integer`
+
+##### replication_factor Type
+
+`integer`
+
+- minimum value: `2`
+
+#### storage_type
+
+The storage type for the namespace, one of memory | device
+
+`storage_type`
+
+- is **required**
+- type: `enum`
+
+The value of this property **must** be equal to one of the [known values below](#namespaces-known-values).
+
+##### storage_type Known Values
+
+| Value    | Description |
+| -------- | ----------- |
+| `memory` |             |
+| `device` |             |
+
+#### xdr_enable
+
+Enable XDR for this namespace. Default false
+
+`xdr_enable`
+
+- is optional
+- type: `boolean`
+
+##### xdr_enable Type
+
+`boolean`
+
+#### xdr_endpoints
+
+Names of other bosh deployments to be used as xdr endpoints for this namespace. They should match one of the
+deployments specified in xdr_deployments
+
+`xdr_endpoints`
+
+- is optional
+- type: `string[]`
+
+##### xdr_endpoints Type
+
+Array type: `string[]`
+
+All items must be of the type: `string`
+
+An object containing entries about the namespace
+
+## server_instances
+
+Number of nodes in the cluster
+
+`server_instances`
+
+- is optional
+- type: `integer`
+- defined in this schema
+
+### server_instances Type
+
+`integer`
+
+- minimum value: `2`
+
+## server_vm_type
+
+Name of a vm type configured in cloud config to be used for Aerospike server nodes
+
+`server_vm_type`
+
+- is optional
+- type: `string`
+- defined in this schema
+
+### server_vm_type Type
+
+`string`
+
+## tls_ca_cert
+
+A Trusted CA certificate to be used for authenticating clients, and XDR endpoints
+
+`tls_ca_cert`
+
+- is optional
+- type: `string`
+- defined in this schema
+
+### tls_ca_cert Type
+
+`string`
+
+## tls_enable
+
+Should TLS be enabled for the cluster. If so, certificates should be provided
+
+`tls_enable`
+
+- is optional
+- type: `boolean`
+- defined in this schema
+
+### tls_enable Type
+
+`boolean`
+
+## tls_private_key
+
+The private key corresponding to the server certificate.
+
+`tls_private_key`
+
+- is optional
+- type: `string`
+- defined in this schema
+
+### tls_private_key Type
+
+`string`
+
+## tls_public_key
+
+A certificate to be presented by the server.
+
+`tls_public_key`
+
+- is optional
+- type: `string`
+- defined in this schema
+
+### tls_public_key Type
+
+`string`
+
+## xdr_deployments
+
+Names of other deployments to use for XDR destinations. Currently set to a max of 5. These deployments must already
+exist.
+
+`xdr_deployments`
+
+- is optional
+- type: `string[]`
+- no more than `5` items in the array
+- defined in this schema
+
+### xdr_deployments Type
+
+Array type: `string[]`
+
+All items must be of the type: `string`
+
+## xdr_enable
+
+Should this cluster be able to ship to a remote cluster
+
+`xdr_enable`
+
+- is optional
+- type: `boolean`
+- defined in this schema
+
+### xdr_enable Type
+
+`boolean`
