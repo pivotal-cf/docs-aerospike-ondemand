@@ -44,9 +44,17 @@ To create an Aerospike service instance using the cf CLI, perform the following 
 
 1. Create an instance of the Aerospike service, specifying both the name of the service plan and the name of the service instance. This example uses the `small` plan.
     <pre class="terminal">
-    $ cf create-service aerospike-on-demand small YOUR-SERVICE-INSTANCE
+    $ cf create-service aerospike-on-demand small YOUR-SERVICE-INSTANCE -c YOUR-EXTRA-CONFIG
     </pre>
-    You can use arbitrary parameters to customize the service instance. See the [Use Arbitrary Parameters](#parameters) section below for more information.
+
+    `YOUR-EXTRA-CONFIG` must be well formed `JSON` adhering to the schema [here](schemas/create.schema.json) and can be either inline or a file. At miniumum you must configure cluster_name and one namespace block.
+
+    Example:
+    <pre class="terminal">
+    cf create-service aerospike-on-demand small my-cluster -c '{"namespaces": [{"name":"test", "storage_type": "memory", "memory_size": "500M"}], "cluster_name": "my-cluster"}'
+
+    [See here](schemas/create.schema.html) for a description of the possible values (based on [the schema](schemas/create.schema.json))
+
 
 1. Bind the instance to an app, adding a parameter with name `setname`, and set the value to the name of the set in the Aerospike database that this app should use to store its data. 
     <pre class="terminal">
@@ -62,104 +70,12 @@ To create an Aerospike service instance using the cf CLI, perform the following 
     </pre>
     The app now has all the credentials required to connect to the Aerospike database in the `VCAP_SERVICES` environment variable.
 
-1. Follow the steps in the [Connect to the AMC](#amc) section of this topic to connect to the AMC for your cluster.
+##<a id='cf-cli-update'></a>Updating a Service Instance Using the cf CLI
 
-##<a id='parameters'></a>Use Arbitrary Parameters
+If you have a service running but need to change some of the configuration you may use the `update-service` command. This command also takes extra config but with a slightly different schema.
 
-The Aerospike EE OnDemand Service for PCF supports a number of arbitrary parameters to customize the service instance either when creating the instance with `cf create-service` or when updating the instance with `cf update-service`.
+<pre class="terminal">
+$ cf update-service aerospike-on-demand YOUR-SERVICE-INSTANCE -c YOUR-EXTRA-CONFIG
+</pre>
 
-###<a id='service'></a>Aerospike Service Parameters
-
-Use the following parameters to customize the Aerospike service instance. If specified, these parameters take precedence over the defaults set up for the plan.
-
-+ `server_instances`: Number of nodes in the cluster
-+ `server_vm_type`: VM type to use for each of the cluster nodes, such as `large.mem`
-+ `server_persistent_disk_type`: Type of disk to use on each of the cluster nodes
-
-###<a id='namespace'></a>Aerospike Namespace Parameters
-
-Use the following parameters to customize the namespace configured on the Aerospike service instance. If specified, these parameters take precedence over the defaults set up for the plan.
-
-+ `namespace_name`: Name to use for the namespace
-+ `namespace_size`: Memory-size to use for the namespace 
-    <p class="note"><strong>Note</strong>: For more information about configuring memory-size, see the Aerospike <a href="http://www.aerospike.com/docs/reference/configuration#memory-size">documentation</a>.</p>
-+ `namespace_storage_type`: Storage type to use for the namespace, either `Device` or `Memory`
-+ `namespace_replication_factor`: Number of copies of a record to be maintained in the cluster
-+ `namespace_default_ttl`: Default time-to-live, in seconds, for a record from the time of creation or last update
-+ `namespace_filesize`: Maximum size for each file storage defined in this namespace
-+ `namespace_data_in_memory`: Boolean; if `true`, always keep a copy of all data in memory
-
-###<a id='service'></a>AMC Parameter
-
-Use the `amc_route` parameter to customize the route to use when configuring the AMC service. If not specified, a default route will be provided.
-
-###<a id='examples'></a>Examples
-
-Pass arbitrary parameters with a valid JSON object containing the desired parameters. Provide the JSON either in-line or in a file.
-
-Consult the following examples:
-
-* This command creates a service instance called `small_cache` that uses the `small` plan template, but uses `as_cache` for the name of the namespace:
-
-    <pre class="terminal">
-    cf create-service aerospike-on-demand small small_cache -c '{"namespace_name":"as_cache"}'
-    </pre>
-
-* This command updates an existing service instance and modifies the number of nodes in the cluster:
-
-    <pre class="terminal">
-    cf update-service small_cache -c '{"server_instances":4}'
-    </pre>
-
-* This command updates an existing service using a JSON file with the parameters:
-
-    <pre class="terminal">
-    cf update-service small_cache -c /tmp/config.json
-    </pre>
-
-<p class="note"><strong>Note</strong>: If one or more arbitrary parameters are used to create or update a service, you must include those parameters with each update of the service. Otherwise, the default values from the plan will be used instead.</p>
-
-##<a id='amc'></a>Connect to the AMC
-
-To access the AMC for your cluster after creating an Aerospike service instance and binding it to an app, perform the following steps:
-
-1. Inspect the environment of the app to get the URL and credentials for the Aerospike Management Console.
-
-    <pre class="terminal">
-    $ cf env YOUR-APP
-	Getting env variables for app YOUR-APP in org aerospike-service-broker-org / space YOUR-SPACE as admin...
-	OK
-	System-Provided:
-	{
-	 "VCAP_SERVICES": {
-	  "aerospike-on-demand": [
-	   {
-	    "credentials": {
-	     "aerospike_amc_ips": [
-	      "10.65.179.212"
-	     ],
-	     "aerospike_server_ips": [
-	      "10.65.179.211"
-	     ],
-	     "amc_address": "https://aerospike-amc.example.com",
-	     "hostname": "10.65.179.211",
-	     "namespace": "as_datastore",
-	     "password": "XXXXXXXXXXXX",
-	     "port": 3000,
-	     "service_type": "small",
-	     "user": "admin"
-	    },
-	    ...
-    </pre>
-
-1. In a browser, navigate to the `amc_address` URL from `VCAP_SERVICES` to connect to the AMC.
-
-1. For **Host Name or IP**, enter the `hostname` IP address from `VCAP_SERVICES` and click **Connect**.
-    <br><%= image_tag('amc-login-2.png') %>
-
-1. For **Username** and **Password**, enter the `user` and `password` from `VCAP_SERVICES` and click **Login**.
-    <br><%= image_tag('amc-login-3.png') %>
-
-1. The Aerospike Management Console appears.
-    <br><%= image_tag('amc.png') %>
-
+[See here](schemas/update.schema.html) for a description of the possible values for an update (based on [the schema](schemas/update.schema.json))
