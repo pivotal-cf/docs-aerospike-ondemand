@@ -47,12 +47,12 @@ To create an Aerospike service instance using the cf CLI, perform the following 
     $ cf create-service aerospike-on-demand small YOUR-SERVICE-INSTANCE -c YOUR-EXTRA-CONFIG
     </pre>
 
-    `YOUR-EXTRA-CONFIG` must be well formed `JSON` adhering to the schema [here](schemas/create.schema.json) and can be either inline or a file. At miniumum you must configure cluster_name and one namespace block.
+    `YOUR-EXTRA-CONFIG` must be well formed `JSON` adhering to [the schema](schemas/create.schema.json) and can be either inline or a file. At miniumum you must configure cluster_name and one namespace block.
 
     Example:
     <pre class="terminal">
     cf create-service aerospike-on-demand small my-cluster -c '{"namespaces": [{"name":"test", "storage_type": "memory", "memory_size": "500M"}], "cluster_name": "my-cluster"}'
-
+</pre>
     [See here](schemas/create.schema.html) for a description of the possible values (based on [the schema](schemas/create.schema.json))
 
 
@@ -79,3 +79,117 @@ $ cf update-service aerospike-on-demand YOUR-SERVICE-INSTANCE -c YOUR-EXTRA-CONF
 </pre>
 
 [See here](schemas/update.schema.html) for a description of the possible values for an update (based on [the schema](schemas/update.schema.json))
+
+## <a id='cf-cli-enable-tls'></a>Enabling TLS
+
+see https://www.aerospike.com/docs/guide/security/tls.html
+
+TLS is optional but may be configured via extra config. To enable full tls:
+
+1. [`tls_enable`](schemas/create.schema.html#tls_enable) must be set to true
+1. [`tls_private_key`](schemas/create.schema.html#tls_private_key) must be provided
+1. [`tls_public_key`](schemas/create.schema.html#tls_public_key) must be provided
+1. [`tls_ca_cert`](schemas/create.schema.html#tls_private_key) must be provided.
+
+
+## <a id='cf-cli-enable-xdr'></a>Enabling XDR
+
+see https://www.aerospike.com/docs/architecture/xdr.html
+
+XDR allows you to synchronize clusters on a per-namespace basis. Aerospike clusters within pivotal may ship data to up to 5 different destinations.
+
+<p class="note"><strong>NOTE:</strong> The destination cluster in an xdr setup must be already deployed in PCF. If a source cluster must be created before the destination cluster it must be created and then updated as a second step.
+
+
+To enable xdr you must set at the top level:
+
+1. [`xdr_enable`](schemas/create.schema.html#xdr_enable-top-level) must be set to `true` at the top level.
+1. [`xdr_deployments`](schema/create.schema.html#xdr_deployments) must be configured with the names of all of the service instances to be used by any of the namespaces (MAX 5)  
+
+And for each namespace xdr shipping is desired:
+
+1. [`xdr_enable`](schemas/create.schema.html#xdr_enable) must be set to `true` to enable xdr for that namespace
+1. [`xdr_endpoints`](schema/create.schema.html#xdr_endpoints) must be set with at least one of the configured `xdr_deployments` values.
+
+## <a id='cf-cli-example'></a> Complete example of two clusters with TLS and two way XDR
+
+In this example we would be deploying two clusters each with TLS and XDR shipping bidirectionally (active-active) for the test namespace. Note this must be done in 3 steps. 
+
+### Deploy first cluster:
+
+This is the file containing the extra configuration. Note in this first cluster there is no xdr information
+
+cluster1deployconfig.json
+<pre class="terminal">
+{
+  "tls_ca_cert": "-----BEGIN CERTIFICATE-----\nMIIEZTCCAs2gAwIBAgIQdHIKbqSUoVdJd+hHDyjLRDANBgkqhkiG9w0BAQsFADA8\nMQwwCgYDVQQGEwNVU0ExFjAUBgNVBAoTDUNsb3VkIEZvdW5kcnkxFDASBgNVBAMT\nC2Flcm9zcGlrZWNhMB4XDTE5MDgwNzIxMjEwMVoXDTIwMDgwNjIxMjEwMVowPDEM\nMAoGA1UEBhMDVVNBMRYwFAYDVQQKEw1DbG91ZCBGb3VuZHJ5MRQwEgYDVQQDEwth\nZXJvc3Bpa2VjYTCCAaIwDQYJKoZIhvcNAQEBBQADggGPADCCAYoCggGBANJcN4/b\nX4TyC/K2Uzd/nhB53/UwKOoNmOrzXmNjWwICehLVa+YHDOVNenifSTz45rAYHR/f\nUMaNqgN26FB19To7qsdfwPmF0xoKtAwUltdxYt3RnnssFJNGHdpdFNOZU09eKJG0\nqyGJ2FhyhokZV9TZLr/u5n34CPkdgdPIchraqEVs2r0xsdQp/Cdj7SgqL9+LCD+E\ncDACWxpUGbTBRHkEKCMsj+ukapF6Sg5DffQbQGOzGyROmHRLPOQNDTw0ovj03Yb+\n12F3f2v1sqHG+a9HyjnY0tBiRj4dXWXQkXhe2uqIUoXlkYxky3GAhIDKtziKd4ON\nQ0h8P+X3Gddzy3SpWxY0dxdYQ01QdM5CiH3bCnN6KJJJfL+eiLNti4dDhjdwMQlr\nHy2uye++sogjNz4hYsYP9rpwyxJdMhHBwTXZCJMWxxn6PMuLyWA3d1Zy9DDlFTsI\ngy8vcUK+YUDIUF8uOXapLISUtHr+pqu0F4M+nmoZpZSRqk0Ji+42fo0diwIDAQAB\no2MwYTAOBgNVHQ8BAf8EBAMCAQYwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQU\neoPAf62Ri3xJ9kHvWdq4WZ34bLgwHwYDVR0jBBgwFoAUeoPAf62Ri3xJ9kHvWdq4\nWZ34bLgwDQYJKoZIhvcNAQELBQADggGBAIysUn7r0OGOJAXXqYoOtAlTW2tP1YBs\nji+xp/OxMTvp53IB904Ti3ly51yryTdbsloE791idAwSLeICPhGCU/pOoLMyE0O4\n3mM8AzrIkKYwheK+PhLXv+GlZtjsaVZ2uRMJ1E50kExBzAiotgQxY3czy5cy1RsY\n8qFFXKSiiwfOo6t6WLnZT4ZsylMbJ58eeNAw2AVsM57WlAuMKd6vSsjsWyfXuYOy\nAKQAoBoVMK0G786N1YyBSNgoX3I70TNZXxOl8ulwxLtSxBCHqNjfkFS7b07bAYxz\nqhrX9mxUw4NGxLRA6lpAbuh9aO1Ht8hzuXgosl688XCG07imYH/95X5EyV8ePibC\nxSFp3dyWdfzx+S7t1+NheI5bDaKyFcZqePncs/yy/eNuxxuXxB9sRXz3bxSUCS9e\nrBpBifx8LxcP0FlCAP3gYrN0Ltf1SY7qG1A2C3Mb4tSY7aOLujLpoU8kMKCug3DB\nB/dvHkIC8BDhFnfCsQi9j6Tvkp0TyX+13A==\n-----END CERTIFICATE-----\n",
+  "tls_private_key": "-----BEGIN RSA PRIVATE KEY-----\n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\n-----END RSA PRIVATE KEY-----\n",
+  "tls_enable": true,
+  "tls_public_key": "-----BEGIN CERTIFICATE-----\nMIIEdDCCAtygAwIBAgIQX5QSEqs2S6t6OWsZffTZcTANBgkqhkiG9w0BAQsFADA8\nMQwwCgYDVQQGEwNVU0ExFjAUBgNVBAoTDUNsb3VkIEZvdW5kcnkxFDASBgNVBAMT\nC2Flcm9zcGlrZWNhMB4XDTE5MDgwNzIxMjEwMVoXDTIwMDgwNjIxMjEwMVowOTEM\nMAoGA1UEBhMDVVNBMRYwFAYDVQQKEw1DbG91ZCBGb3VuZHJ5MREwDwYDVQQDEwhj\nbHVzdGVyMTCCAaIwDQYJKoZIhvcNAQEBBQADggGPADCCAYoCggGBAMhzsdffdJTT\ngv8jnutDNLvgV8eOAZU/XYQvJi/7Lhf8ue4vNSWjLFzX5qwQudEne2KUR0ZxsP3M\nj4CYMF5XjDYvTjrCtEe6005+RrEg6k3b0RG6dWtd+3gohAIbvYHOpAh9vAg41VWn\n2n0BOFyYrpGqVCcr9ffCUj/OQk+6OQEE+TDVVVGsyrynbwd8FebPSEp3096yXyDn\noCzaqJ1BhFVW8TLTgkWttbjQVG6g6GtaeFTKC/WC5KkOeDxa3e1wXlOZizhLGEAh\nkp6uvHBMcqBNpvx7WTPEuKI/YzNVqR25Kc7gJMFuGKZPpSBY3ndNOD8S9CiNZEYc\nXFansnFzgbCxj0HpxB9Rlk7DoiPlfN3/LS2crTKUthFcRCg1TbfKxIaCkQqqvv/p\nbFbypD2vnzNYpPXM+9Lb1dIrixfaGzwV+Al0cI4EuupQgpmyLYZf5eY+sWn9racL\nvhKWruvXp2VNlmxWObUBy970L5jY2E7pf3TH7T27N3q4krqY9hMMnwIDAQABo3Uw\nczAOBgNVHQ8BAf8EBAMCBaAwEwYDVR0lBAwwCgYIKwYBBQUHAwEwDAYDVR0TAQH/\nBAIwADAdBgNVHQ4EFgQUiO8+CKkF25w8CaYHtQ8hcWpX9uQwHwYDVR0jBBgwFoAU\neoPAf62Ri3xJ9kHvWdq4WZ34bLgwDQYJKoZIhvcNAQELBQADggGBAHxm6IE0HO/P\ncO0ZQWX+aeuHSJimzGjAhvHfj/gebOn4rT7rTprEdRDXoGZgGCdDLioczG/Mj3Kd\n9ZFS9r5hB/k1fKfDVp0tjSh+IEfv4spix7uizZsJjuz5zwCLWOQ55j19qir/wBew\nxQ2eWDLXPvuCFfMwalm+TDOZ+TsjoON5h2Q4djeWXck2YZOYJcJlFwtDsOJHRk2E\nxEVkVMYyT6yKoQ12gmwTvquavw1Q/5t9R0vQe1p6fDs8a0O1QLvVfgFIZPWQ3cLH\nxW64tAu1suF2NRXNKQH1g6vijMuHv7FAml0R8DjHm1NVEkmieYuqiR30SEfFPhn1\nT/mp/5C7SHydXRh89gFW40i1UvC5sne3aNB+kDygaadNRWIzuwb56lxQuMHTUvyd\n9mQq16rMRWw5eIkbtuCdmH5Pg5syPsOWiELfxdnE4GyAs8hQReZKc3yo16f3ktqG\nsySaDfYtKwESWiSOkYK6Z4JcDZKfwMd1kYx2UoCpaFaX7i9z0KA37Q==\n-----END CERTIFICATE-----\n",
+  "cluster_name": "cluster1",
+  "namespaces": [
+    { "storage_type": "memory", "memory_size": "500M", "name": "test" }
+  ]
+}
+</pre>
+
+<pre class="terminal">
+ cf create-service aerospike-on-demand small cluster1 -c cluster1deployconfig.json
+</pre>
+
+### Deploy second cluster:
+
+This is the file containing the extra configuration for cluster two. In this one we are able to add in all of the xdr links since we already have the first cluster up.
+
+<p class="note warning"><strong>WARNING:</strong> You must wait for the first cluster to successfully deploy before deploying the second cluster.
+
+
+cluster2deployconfig.json
+<pre class="terminal">
+{
+  "cluster_name": "cluster2",
+  "tls_ca_cert": "-----BEGIN CERTIFICATE-----\nMIIEZTCCAs2gAwIBAgIQdHIKbqSUoVdJd+hHDyjLRDANBgkqhkiG9w0BAQsFADA8\nMQwwCgYDVQQGEwNVU0ExFjAUBgNVBAoTDUNsb3VkIEZvdW5kcnkxFDASBgNVBAMT\nC2Flcm9zcGlrZWNhMB4XDTE5MDgwNzIxMjEwMVoXDTIwMDgwNjIxMjEwMVowPDEM\nMAoGA1UEBhMDVVNBMRYwFAYDVQQKEw1DbG91ZCBGb3VuZHJ5MRQwEgYDVQQDEwth\nZXJvc3Bpa2VjYTCCAaIwDQYJKoZIhvcNAQEBBQADggGPADCCAYoCggGBANJcN4/b\nX4TyC/K2Uzd/nhB53/UwKOoNmOrzXmNjWwICehLVa+YHDOVNenifSTz45rAYHR/f\nUMaNqgN26FB19To7qsdfwPmF0xoKtAwUltdxYt3RnnssFJNGHdpdFNOZU09eKJG0\nqyGJ2FhyhokZV9TZLr/u5n34CPkdgdPIchraqEVs2r0xsdQp/Cdj7SgqL9+LCD+E\ncDACWxpUGbTBRHkEKCMsj+ukapF6Sg5DffQbQGOzGyROmHRLPOQNDTw0ovj03Yb+\n12F3f2v1sqHG+a9HyjnY0tBiRj4dXWXQkXhe2uqIUoXlkYxky3GAhIDKtziKd4ON\nQ0h8P+X3Gddzy3SpWxY0dxdYQ01QdM5CiH3bCnN6KJJJfL+eiLNti4dDhjdwMQlr\nHy2uye++sogjNz4hYsYP9rpwyxJdMhHBwTXZCJMWxxn6PMuLyWA3d1Zy9DDlFTsI\ngy8vcUK+YUDIUF8uOXapLISUtHr+pqu0F4M+nmoZpZSRqk0Ji+42fo0diwIDAQAB\no2MwYTAOBgNVHQ8BAf8EBAMCAQYwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQU\neoPAf62Ri3xJ9kHvWdq4WZ34bLgwHwYDVR0jBBgwFoAUeoPAf62Ri3xJ9kHvWdq4\nWZ34bLgwDQYJKoZIhvcNAQELBQADggGBAIysUn7r0OGOJAXXqYoOtAlTW2tP1YBs\nji+xp/OxMTvp53IB904Ti3ly51yryTdbsloE791idAwSLeICPhGCU/pOoLMyE0O4\n3mM8AzrIkKYwheK+PhLXv+GlZtjsaVZ2uRMJ1E50kExBzAiotgQxY3czy5cy1RsY\n8qFFXKSiiwfOo6t6WLnZT4ZsylMbJ58eeNAw2AVsM57WlAuMKd6vSsjsWyfXuYOy\nAKQAoBoVMK0G786N1YyBSNgoX3I70TNZXxOl8ulwxLtSxBCHqNjfkFS7b07bAYxz\nqhrX9mxUw4NGxLRA6lpAbuh9aO1Ht8hzuXgosl688XCG07imYH/95X5EyV8ePibC\nxSFp3dyWdfzx+S7t1+NheI5bDaKyFcZqePncs/yy/eNuxxuXxB9sRXz3bxSUCS9e\nrBpBifx8LxcP0FlCAP3gYrN0Ltf1SY7qG1A2C3Mb4tSY7aOLujLpoU8kMKCug3DB\nB/dvHkIC8BDhFnfCsQi9j6Tvkp0TyX+13A==\n-----END CERTIFICATE-----\n",
+  "tls_private_key": "-----BEGIN RSA PRIVATE KEY-----\n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\n-----END RSA PRIVATE KEY-----\n",
+  "namespaces": [
+    {
+      "memory_size": "500M",
+      "xdr_enable": true,
+      "xdr_endpoints": [
+        "service-instance_20ebaec2-c718-4816-bfbe-111111111111"
+      ],
+      "storage_type": "memory",
+      "name": "test"
+    }
+  ],
+  "tls_public_key": "-----BEGIN CERTIFICATE-----\nMIIEdTCCAt2gAwIBAgIRAKf/HIJQTtHyBuJNvqWDBVIwDQYJKoZIhvcNAQELBQAw\nPDEMMAoGA1UEBhMDVVNBMRYwFAYDVQQKEw1DbG91ZCBGb3VuZHJ5MRQwEgYDVQQD\nEwthZXJvc3Bpa2VjYTAeFw0xOTA4MDcyMTIxMDJaFw0yMDA4MDYyMTIxMDJaMDkx\nDDAKBgNVBAYTA1VTQTEWMBQGA1UEChMNQ2xvdWQgRm91bmRyeTERMA8GA1UEAxMI\nY2x1c3RlcjIwggGiMA0GCSqGSIb3DQEBAQUAA4IBjwAwggGKAoIBgQC9yQWFeOPS\nZAiWzbzaeKS5m620O3npTXhHh3w2zIKHfb8Y4SH13kNX7mPizmT6g/Hs0M6TL5Ij\nGFPowDU6PvGVHDZYt+vnY5JOCdsTPFdjy4K5Z+dMwZBUtPcTnR/kzG0E2RHhczBf\noK3xgctgYLQQVsEq/uML6JxKfTpYzw2tfSwGAbo7ssP3wMjrbvGqf2lNL4YDLfKl\nHwyC+yklBCPHZj6+c3Op6djG6hUB4cCUPXnU2BMhNKwOuWTFspndTsWqnrgyTsh6\np9oYLm9axTmtzMXUxCK+q15f0S1ZXIN7i/xOOqtOSoHKcHw5BEmlGlZr67az94Va\n/jjkmz7b4zTYn+sC9u5fQXFd7ZjGS1WCuU/lrliAqPKUZnix2CdhYx1iG/8XfXND\nYw2scC4H3Nbf6+j/cfJM+HogwUbIWrfsgP/wZkO3mG6JACZqkv8ATp3MqgZY8ety\nDFdbuWcBmudziiENY9zx+uLsBFcgY7VePLxLLDznDzYIknouioknlLcCAwEAAaN1\nMHMwDgYDVR0PAQH/BAQDAgWgMBMGA1UdJQQMMAoGCCsGAQUFBwMBMAwGA1UdEwEB\n/wQCMAAwHQYDVR0OBBYEFDDjq4yScaVqLljA+wmBaPgsrQj+MB8GA1UdIwQYMBaA\nFHqDwH+tkYt8SfZB71nauFmd+Gy4MA0GCSqGSIb3DQEBCwUAA4IBgQDSJw4sQ2N9\n0TqmBUagghILJx7+1QYywvsZOJwMmlSv46+GVGC/925AFo4n4x8qzQBqP5UoVoHu\nGIN7mVfyB2q+vBy5IjemlaXAiiTDOqI9qK+VmENDW4CJ1yC/bcO8XTTW8fPY5v+r\nHmhGLh13nZ18faRGbcCs2TbsTY+O5X9mDCrVrTvhTarGc3hmZ0ScUXgdNz8mK5bi\nbASTb2DitUu/ez0HDkBG0bPDKR04/hKE795uuyk8o7xHZFOiSDz+oznp2fogbK7C\nA6hHw/r+Sc/DjHqc356WI3pz9Nb48KH7PN5k7slLr++SNb8C7f29o5/EAxohkKMJ\nrCSHuIlxd73znC5Se5vK/vZ2/WL72jinHvxL5NEwiuvKN0QFXn2FAR92emLdB5Kb\nKr8CjtQ2yiWYqIJZbKX1DSkvhaMQpdAzvoVLu5pB0+z3f2dIySdTeKfLpkHm4aQD\nKPSx4RI6VEj72HY99gA3kolEnIv602k7zLUIzR72pC6h05y68Tz8SQg=\n-----END CERTIFICATE-----\n",
+  "xdr_enable": true,
+  "xdr_deployments": ["service-instance_20ebaec2-c718-4816-bfbe-111111111111"],
+  "tls_enable": true
+}
+</pre>
+
+
+<pre class="terminal">
+ cf create-service aerospike-on-demand small cluster2 -c cluster2deployconfig.json
+</pre>
+
+### Update cluster1 to xdr to cluster2
+
+cluster1updateconfig.json
+<pre class="terminal">
+{
+  "xdr_enable": true,
+  "xdr_deployments": ["service-instance_20ebaec2-c718-4816-bfbe-222222222222"],
+  "ns_xdr_endpoints": [
+    {
+      "xdr_enable": true,
+      "xdr_endpoint_deployments": ["service-instance_20ebaec2-c718-4816-bfbe-222222222222"],
+      "namespace": "test"
+    }
+  ]
+}
+</pre>
+
+<pre class="terminal">
+ cf update-service cluster1 -c cluster1updateconfig.json
+</pre>

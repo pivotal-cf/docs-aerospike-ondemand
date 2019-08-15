@@ -21,7 +21,7 @@
 | [tls_private_key](#tls_private_key)   | `string`   | Optional     | No       | (this schema) |
 | [tls_public_key](#tls_public_key)     | `string`   | Optional     | No       | (this schema) |
 | [xdr_deployments](#xdr_deployments)   | `string[]` | Optional     | No       | (this schema) |
-| [xdr_enable](#xdr_enable)             | `boolean`  | Optional     | No       | (this schema) |
+| [xdr_enable](#xdr_enable-top-level)   | `boolean`  | Optional     | No       | (this schema) |
 
 ## cluster_name
 
@@ -286,7 +286,7 @@ Array type: `string[]`
 
 All items must be of the type: `string`
 
-## xdr_enable
+## xdr_enable <span id=xdr_enable-top-level></a>
 
 Should this cluster be able to ship to a remote cluster
 
