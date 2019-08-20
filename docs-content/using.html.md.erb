@@ -104,12 +104,12 @@ XDR allows you to synchronize clusters on a per-namespace basis. Aerospike clust
 To enable xdr you must set at the top level:
 
 1. [`xdr_enable`](schemas/create.schema.html#xdr_enable-top-level) must be set to `true` at the top level.
-1. [`xdr_deployments`](schema/create.schema.html#xdr_deployments) must be configured with the names of all of the service instances to be used by any of the namespaces (MAX 5)  
+1. [`xdr_deployments`](schemas/create.schema.html#xdr_deployments) must be configured with the names of all of the service instances to be used by any of the namespaces (MAX 5)  
 
 And for each namespace xdr shipping is desired:
 
 1. [`xdr_enable`](schemas/create.schema.html#xdr_enable) must be set to `true` to enable xdr for that namespace
-1. [`xdr_endpoints`](schema/create.schema.html#xdr_endpoints) must be set with at least one of the configured `xdr_deployments` values.
+1. [`xdr_endpoints`](schemas/create.schema.html#xdr_endpoints) must be set with at least one of the configured `xdr_deployments` values.
 
 ## <a id='cf-cli-example'></a> Complete example of two clusters with TLS and two way XDR
 
