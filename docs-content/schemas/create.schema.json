@@ -1,0 +1,110 @@
+{
+    "definitions": {},
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "cluster_name",
+        "namespaces"
+    ],
+    "properties": {
+        "cluster_name": {
+            "type": "string",
+            "description": "A name for the cluster. This should be unique across all Aerospike Deployments"
+        },
+        "namespaces": {
+            "type": "array",
+            "description": "An array of namespace objects",
+            "minItems": 1,
+            "items": {
+                "type": "object",
+                "description": "An object containing entries about the namespace",
+                "properties": {
+                    "default_ttl": {
+                        "type": "string",
+                        "description": "Default ttl for the namespace. Should be 0 to indicate no expiration, or An integer followed by one of [SDH]"
+                    },
+                    "disk_size": {
+                        "type": "string",
+                        "description": "Disk size for the namespace. Should be an integer followed by one of [KMGTP] for the unit. Required if storage_type=device"
+                    },
+                    "memory_size": {
+                        "type": "string",
+                        "description": "Memory size for the namespace. Should be an integer followed by one of [KMGTP] for the unit"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "The name of the namespace"
+                    },
+                    "replication_factor": {
+                        "type": "integer",
+                        "description": "The replication factor for the namespace",
+                        "minimum": 2
+                    },
+                    "storage_type": {
+                        "type": "string",
+                        "enum": [
+                            "memory",
+                            "device"
+                        ],
+                        "description": "The storage type for the namespace, one of memory | device"
+                    },
+                    "xdr_enable": {
+                        "type": "boolean",
+                        "description": "Enable XDR for this namespace. Default false"
+                    },
+                    "xdr_endpoints": {
+                        "type": "array",
+                        "description": "Names of other bosh deployments to be used as xdr endpoints for this namespace. They should match one of the deployments specified in xdr_deployments",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "required": [
+                    "memory_size",
+                    "name",
+                    "storage_type"
+                ]
+            }
+        },
+        "server_instances": {
+            "type": "integer",
+            "description": "Number of nodes in the cluster",
+            "minimum": 2
+        },
+        "server_vm_type": {
+            "type": "string",
+            "description": "Name of a vm type configured in cloud config to be used for Aerospike server nodes"
+        },
+        "tls_ca_cert": {
+            "type": "string",
+            "description": "A Trusted CA certificate to be used for authenticating clients, and XDR endpoints"
+        },
+        "tls_enable": {
+            "type": "boolean",
+            "description": "Should TLS be enabled for the cluster. If so, certificates should be provided"
+        },
+        "tls_private_key": {
+            "type": "string",
+            "description": "The private key corresponding to the server certificate."
+        },
+        "tls_public_key": {
+            "type": "string",
+            "description": "A certificate to be presented by the server."
+        },
+        "xdr_deployments": {
+            "type": "array",
+            "description": "Names of other deployments to use for XDR destinations. Currently set to a max of 5. These deployments must already exist.",
+            "maxItems": 5,
+            "uniqueItems": true,
+            "items": {
+                "type": "string"
+            }
+        },
+        "xdr_enable": {
+            "type": "boolean",
+            "description": "Should this cluster be able to ship to a remote cluster"
+        }
+    }
+}
