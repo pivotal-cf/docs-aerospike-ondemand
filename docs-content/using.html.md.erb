@@ -1,11 +1,11 @@
 ---
-title: Using Aerospike EE OnDemand Service for PCF
+title: Using Aerospike EE OnDemand Service for Pivotal Platform
 owner: Partners
 ---
 
-This topic describes how to use Aerospike EE OnDemand Service for Pivotal Cloud Foundry (PCF).
+This topic describes how to use Aerospike EE OnDemand Service for Pivotal Platform.
 
-After installing and configuring the Aerospike EE OnDemand Service for PCF tile, developers can create service instances of Aerospike service plans and bind them to their apps using the Cloud Foundry Command Line Interface (cf CLI). Binding an Aerospike service instance to an app provides the app with information it can use to store and retrieve information in an Aerospike database.
+After installing and configuring the Aerospike EE OnDemand Service for Pivotal Platform tile, developers can create service instances of Aerospike service plans and bind them to their apps using the Cloud Foundry Command Line Interface (cf CLI). Binding an Aerospike service instance to an app provides the app with information it can use to store and retrieve information in an Aerospike database.
 
 When creating an Aerospike service instance, the tile will also create an Aerospike Management Console (AMC) that can be used to monitor the health and activity on the Aerospike cluster.
 
@@ -98,7 +98,7 @@ see https://www.aerospike.com/docs/architecture/xdr.html
 
 XDR allows you to synchronize clusters on a per-namespace basis. Aerospike clusters within pivotal may ship data to up to 5 different destinations.
 
-<p class="note"><strong>NOTE:</strong> The destination cluster in an xdr setup must be already deployed in PCF. If a source cluster must be created before the destination cluster it must be created and then updated as a second step.
+<p class="note"><strong>NOTE:</strong> The destination cluster in an xdr setup must be already deployed in Pivotal Platform. If a source cluster must be created before the destination cluster it must be created and then updated as a second step.
 
 
 To enable xdr you must set at the top level:
